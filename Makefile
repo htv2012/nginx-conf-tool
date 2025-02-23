@@ -12,6 +12,7 @@ lint:
 ### Run the project
 run: lint
 	uv run nct tree samples/nginx.conf
+	uv run nct tree samples/nginx.conf -d
 
 ### Run unit tests
 test: lint

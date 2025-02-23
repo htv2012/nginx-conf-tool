@@ -1,35 +1,40 @@
 import click
-import crossplane
+
+from .parse import ParseError, parse
 
 
-def print_tree(nodes: list, prefix: str = ""):
+def print_tree(nodes: list, directory_only: bool = False, prefix: str = ""):
     for index, node in enumerate(nodes):
         is_last = index == len(nodes) - 1
         connector = "└── " if is_last else "├── "
-        click.echo(f"{prefix}{connector}", nl=False)
 
         name = node["directive"]
         children = node.get("block")
         if children:
+            click.echo(f"{prefix}{connector}", nl=False)
             click.echo(click.style(name, fg="cyan"), color=True, nl=False)
             if name == "location":
                 click.echo(" " + " ".join(node["args"]), nl=False)
             click.echo("")
             print_tree(
                 nodes=children,
+                directory_only=directory_only,
                 prefix=prefix + ("    " if is_last else "│   "),
             )
-        else:
+        elif not directory_only:
+            click.echo(f"{prefix}{connector}", nl=False)
             click.echo(name)
 
 
 @click.command()
 @click.pass_context
 @click.argument("file")
-def tree(ctx, file):
-    root = crossplane.parse(file)
-    assert root["errors"] == []
-    config = root["config"][0]
-    assert config["errors"] == []
-    parsed = config["parsed"]
-    print_tree(parsed)
+@click.option(
+    "-d", "--directory", is_flag=True, help="List only those directives with children"
+)
+def tree(ctx: click.Context, file, directory):
+    try:
+        parsed = parse(file)
+    except ParseError as error:
+        ctx.exit(error)
+    print_tree(parsed, directory_only=directory)
