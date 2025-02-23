@@ -11,4 +11,4 @@ This package introduces a command `nct` with sub-commands.
 This sub command will scan the nginx.conf file and display its structure as a tree:
 
     $ nct tree <path-to-nginx.conf>
-    $ nct tree /etc/nginx/nginx.con
+    $ nct tree /etc/nginx/nginx.conf
