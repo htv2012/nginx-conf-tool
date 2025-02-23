@@ -1,15 +1,12 @@
 import click
 
-from .parse import ParseError, parse
+from . import parser
 
 
 def _print_directive(name, prefix, is_last, is_context: bool = False):
     connector = "└── " if is_last else "├── "
     click.echo(f"{prefix}{connector}", nl=False)
-    if is_context:
-        click.echo(click.style(name, fg="cyan"), color=True)
-    else:
-        click.echo(name)
+    click.echo(click.style(name, fg="cyan") if is_context else name, color=True)
 
 
 def print_tree(
@@ -18,8 +15,8 @@ def print_tree(
     if level == 0:
         return
 
-    for index, node in enumerate(nodes):
-        is_last = index == len(nodes) - 1
+    for node in nodes:
+        is_last = node is nodes[-1]
 
         name = node["directive"]
         children = node.get("block")
@@ -49,8 +46,8 @@ def print_tree(
 )
 def tree(ctx: click.Context, file, directory, level):
     try:
-        parsed_list = parse(file)
-    except ParseError as error:
+        parsed_list = parser.parse(file)
+    except parser.ParseError as error:
         ctx.exit(error)
 
     for parsed in parsed_list:

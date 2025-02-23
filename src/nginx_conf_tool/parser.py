@@ -14,7 +14,7 @@ def _format_error(error: dict):
     msg.write(error["file"])
     if error["line"] is not None:
         msg.write(f"({error['line']})")
-    msg.write(f": {error['error'] or 'unknown error'}")
+    msg.write(f": {error.get('error', 'unknown error')}")
     return msg.getvalue()
 
 
@@ -26,6 +26,7 @@ def _handle_errors(errors: list):
 
 
 def parse(path: str) -> list[dict]:
+    """Parses a path and handle errors"""
     root = crossplane.parse(path)
     _handle_errors(root["errors"])
 
