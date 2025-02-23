@@ -34,7 +34,9 @@ def print_tree(nodes: list, directory_only: bool = False, prefix: str = ""):
 )
 def tree(ctx: click.Context, file, directory):
     try:
-        parsed = parse(file)
+        parsed_list = parse(file)
     except ParseError as error:
         ctx.exit(error)
-    print_tree(parsed, directory_only=directory)
+
+    for parsed in parsed_list:
+        print_tree(parsed, directory_only=directory)

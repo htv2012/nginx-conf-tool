@@ -25,12 +25,12 @@ def _handle_errors(errors: list):
     raise ParseError("\n".join(_format_error(error) for error in errors))
 
 
-def parse(path: str) -> dict:
+def parse(path: str) -> list[dict]:
     root = crossplane.parse(path)
     _handle_errors(root["errors"])
 
-    config = root["config"][0]
-    _handle_errors(config["errors"])
-
-    parsed = config["parsed"]
-    return parsed
+    parsed_list = []
+    for config in root["config"]:
+        _handle_errors(config["errors"])
+        parsed_list.append(config["parsed"])
+    return parsed_list
