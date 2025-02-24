@@ -10,13 +10,13 @@ lint:
 	uv tool run ruff check . --fix
 
 ### Run the project
-run: lint
+run: lint test
 	uv run nct tree samples/nginx.conf -L2
 	uv run nct tree samples/nginx.conf -d
 
 ### Run unit tests
 test: lint
-	uv run pytest -s -v
+	uv run pytest -v
 
 ### Clean up generated files
 clean:

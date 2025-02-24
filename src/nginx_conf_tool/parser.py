@@ -14,7 +14,7 @@ def _format_error(error: dict):
     msg.write(error["file"])
     if error["line"] is not None:
         msg.write(f"({error['line']})")
-    fault = error['error'] or 'unknown error'
+    fault = error["error"] or "unknown error"
     msg.write(f": {fault}")
     return msg.getvalue()
 
