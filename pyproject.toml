@@ -14,7 +14,7 @@ dependencies = [
 
 [project.scripts]
 nct = "nginx_conf_tool:main"
-ntree = "nginx_conf_tool.tree:tree"
+nct-tree = "nginx_conf_tool.tree:tree"
 
 [build-system]
 requires = ["hatchling"]
