@@ -15,6 +15,7 @@ from nginx_conf_tool.tree import tree
         pytest.param(
             ["-L", "1", "samples/simple.conf"], 0, "simple_level1.txt", id="-L option"
         ),
+        pytest.param(["samples/faulty.conf"], 1, "", id="file with error"),
     ],
 )
 def test_simple_verify_stdout(request, args, expected_code, expected_output_file):
